@@ -22,5 +22,4 @@ node {
             error "Tests failed: ${e.message}"
         }
     }
-   
 }
