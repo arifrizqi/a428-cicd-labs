@@ -1,20 +1,20 @@
 pipeline {
     agent {
         docker {
-            image 'node:16-buster-slim' 
-            args '-p 3000:3000' 
+            image 'node:16-buster-slim'
+            args '-p 3000:3000'
         }
     }
     stages {
-        stage('Build') { 
+        stage('Build') {
             steps {
                 checkout scm
-                sh 'npm cache clean --force'
                 sh 'npm install'
             }
         }
         stage('Test') { 
             steps {
+                checkout scm
                 sh './jenkins/scripts/test.sh' 
             }
         }
