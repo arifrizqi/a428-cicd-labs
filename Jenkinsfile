@@ -1,25 +1,21 @@
-node {
-    stage('Build') {
-        echo 'Building the project...'
-        try {
-            docker.image('node:16-buster-slim').inside("-p 3000:3000") {
-                checkout scm
-                sh 'npm install'
-            }
-        } catch (Exception e) {
-            currentBuild.result = 'FAILURE'
-            error "Build failed: ${e.message}"
+pipeline {
+    agent {
+        docker {
+            image 'node:16-buster-slim' 
+            args '-p 3000:3000' 
         }
     }
-    stage('Test') {
-        echo 'Running tests...'
-        try {
-            docker.image('node:16-buster-slim').inside("-p 3000:3000") {
-                sh './jenkins/scripts/test.sh'
+    stages {
+        stage('Build') { 
+            steps {
+                sh 'npm cache clean --force'
+                sh 'npm install'
             }
-        } catch (Exception e) {
-            currentBuild.result = 'FAILURE'
-            error "Tests failed: ${e.message}"
+        }
+        stage('Test') { 
+            steps {
+                sh './jenkins/scripts/test.sh' 
+            }
         }
     }
 }
