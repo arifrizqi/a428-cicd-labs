@@ -8,6 +8,7 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
+                checkout scm
                 sh 'npm cache clean --force'
                 sh 'npm install'
             }
